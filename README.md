@@ -1,8 +1,8 @@
-# Manga Reader App
+# Manga/Novel Reader App
 
 ## Overview
 
-This app provides a comprehensive manga reading experience with features like browsing, bookmarking, history tracking, and settings customization. It follows a Clean Architecture and MVVM pattern with Dagger Hilt and Jetpack Compose.
+This app provides a comprehensive manga/novel reading experience with features like browsing, bookmarking, history tracking, and settings customization. It follows a Clean Architecture and MVVM pattern with Dagger Hilt and Jetpack Compose.
 
 ## Main Features
 
@@ -22,7 +22,7 @@ This app provides a comprehensive manga reading experience with features like br
 
 ### Home
 - **Body:** Content dependent on selected source.
-- **Source Selector:** Allows switching between different manga sources.
+- **Source Selector:** Allows switching between different sources.
 
 ### History
 - **List View:** Displays read book divided by date.
@@ -91,7 +91,7 @@ This app provides a comprehensive manga reading experience with features like br
   - Chapter List
 
 ### Migration
-- **Migration Tool:** Migrate from mtc dead to stv.
+- **Migration Tool:** 
 
 ## Architecture
 This project is structured using the Clean Architecture approach with MVVM pattern and Dagger Hilt for dependency injection.

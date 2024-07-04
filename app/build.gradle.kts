@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("androidx.room")
 }
 
 android {
@@ -47,6 +51,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -66,4 +73,25 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //dagger hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    //jsoup
+    implementation(libs.jsoup)
+
+    //room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+
+    // To use Kotlin annotation processing tool (kapt)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.androidx.room.compiler)
+    // To use Kotlin Symbol Processing (KSP)
+    //ksp("androidx.room:room-compiler:2.6.1")//dagger hilt
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
