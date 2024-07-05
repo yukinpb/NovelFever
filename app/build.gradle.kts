@@ -66,6 +66,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -90,6 +93,10 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     // To use Kotlin Symbol Processing (KSP)
     //ksp("androidx.room:room-compiler:2.6.1")//dagger hilt
+
+    implementation(libs.androidx.material.icons.extended)
+
+    implementation(libs.accompanist.pager)
 }
 // Allow references to generated code
 kapt {
