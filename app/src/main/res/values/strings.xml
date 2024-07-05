@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NovelFever</string>
+    <string name="home_screen">Home</string>
+    <string name="update_screen">Update</string>
+    <string name="library_screen">Library</string>
+    <string name="history_screen">History</string>
+    <string name="setting_screen">Setting</string>
 </resources>
