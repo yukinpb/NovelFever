@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 
 class NetTruyenScraper(
-    private val source: BookSource = BookSource.NETTRUYEN
+    override val source: BookSource = BookSource.NETTRUYEN
 ) : Scraper {
 
     override suspend fun getBook(): Flow<List<Book>> = flow {
