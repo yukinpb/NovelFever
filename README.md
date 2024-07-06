@@ -37,10 +37,6 @@ This app provides a comprehensive manga/novel reading experience with features l
 ### Settings
 - **Tab Setting Options:** Provides various settings to customize the app.
 
-### Favorite
-- **List View:** Displays favorite books.
-  - **Item Click:** Navigates to book detail.
-
 ### Book Detail
 - **Details:**
   - Book Title
