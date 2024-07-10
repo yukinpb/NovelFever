@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.screen.navigation
+package com.example.novelfever.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,11 +21,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.novelfever.R
-import com.example.novelfever.ui.screen.screen.HomeScreen
-import com.example.novelfever.ui.screen.screen.LibraryScreen
-import com.example.novelfever.ui.screen.screen.SettingScreen
-import com.example.novelfever.ui.screen.screen.HistoryScreen
-import com.example.novelfever.ui.screen.screen.UpdateScreen
+import com.example.novelfever.ui.screen.LibraryScreen
+import com.example.novelfever.ui.screen.SettingScreen
+import com.example.novelfever.ui.screen.HistoryScreen
+import com.example.novelfever.ui.screen.UpdateScreen
+import com.example.novelfever.ui.screen.home.HomeScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController, paddingValues: PaddingValues) {

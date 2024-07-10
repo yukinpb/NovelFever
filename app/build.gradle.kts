@@ -91,12 +91,17 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
-    // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:2.6.1")//dagger hilt
 
+    // To use Kotlin annotation processing tool (kapt)
     implementation(libs.androidx.material.icons.extended)
 
+    // Accompanist
     implementation(libs.accompanist.pager)
+
+    // OkHttp
+    implementation(libs.okhttp)
+
+    implementation(libs.gson)
 }
 // Allow references to generated code
 kapt {

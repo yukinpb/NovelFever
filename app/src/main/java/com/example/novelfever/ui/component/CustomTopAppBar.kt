@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.screen.component
+package com.example.novelfever.ui.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
