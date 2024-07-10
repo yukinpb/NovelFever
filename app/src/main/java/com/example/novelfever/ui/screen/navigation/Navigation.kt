@@ -41,7 +41,7 @@ fun NavigationGraph(navController: NavHostController, paddingValues: PaddingValu
 
 sealed class Screen(val route: String, val selectedIcon: ImageVector, val unselectedIcon: ImageVector, @StringRes val resourceId: Int, val badgeCount: Int?) {
     data object Home: Screen("home", Icons.Filled.Home, Icons.Outlined.Home, R.string.home_screen, null)
-    data object Update: Screen("update", Icons.Filled.AutoAwesome, Icons.Outlined.AutoAwesome, R.string.update_screen, null)
+    data object Update: Screen("update", Icons.Filled.AutoAwesome, Icons.Outlined.AutoAwesome, R.string.update_screen, 10)
     data object Library: Screen("library", Icons.Filled.Book, Icons.Outlined.Book, R.string.library_screen, null)
     data object History: Screen("history", Icons.Filled.Bookmarks, Icons.Outlined.Bookmarks, R.string.history_screen, null)
     data object Setting: Screen("setting", Icons.Filled.Settings, Icons.Outlined.Settings, R.string.setting_screen, null)
