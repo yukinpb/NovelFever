@@ -97,6 +97,15 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.accompanist.pager)
+
+    //window manager
+    implementation(libs.androidx.window)
+
+    //coil
+    implementation(libs.coil)
+
+    //Coil compose
+    implementation(libs.coil.compose)
 }
 // Allow references to generated code
 kapt {
