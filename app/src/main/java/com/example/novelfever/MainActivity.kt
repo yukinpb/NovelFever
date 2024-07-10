@@ -18,14 +18,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.novelfever.ui.screen.component.CustomBottomAppBar
-import com.example.novelfever.ui.screen.component.CustomTopAppBar
-import com.example.novelfever.ui.screen.navigation.Screen
-import com.example.novelfever.ui.screen.screen.HistoryScreen
-import com.example.novelfever.ui.screen.screen.HomeScreen
-import com.example.novelfever.ui.screen.screen.LibraryScreen
-import com.example.novelfever.ui.screen.screen.SettingScreen
-import com.example.novelfever.ui.screen.screen.UpdateScreen
+import com.example.novelfever.ui.component.CustomBottomAppBar
+import com.example.novelfever.ui.component.CustomTopAppBar
+import com.example.novelfever.ui.navigation.Screen
+import com.example.novelfever.ui.screen.HistoryScreen
+import com.example.novelfever.ui.screen.LibraryScreen
+import com.example.novelfever.ui.screen.SettingScreen
+import com.example.novelfever.ui.screen.UpdateScreen
+import com.example.novelfever.ui.screen.home.HomeScreen
 import com.example.novelfever.ui.theme.NovelFeverTheme
 import kotlinx.coroutines.launch
 

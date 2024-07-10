@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.screen.screen
+package com.example.novelfever.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

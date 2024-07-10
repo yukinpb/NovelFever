@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.screen.component
+package com.example.novelfever.ui.component
 
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -9,7 +9,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.example.novelfever.ui.screen.navigation.Screen
+import com.example.novelfever.ui.navigation.Screen
 
 
 @Composable

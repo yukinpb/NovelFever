@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.screen.screen
+package com.example.novelfever.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
-fun UpdateScreen(navController: NavHostController) {
+fun LibraryScreen(navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
