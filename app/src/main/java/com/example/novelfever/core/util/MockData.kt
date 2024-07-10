@@ -2,6 +2,7 @@ package com.example.novelfever.core.util
 
 import com.example.novelfever.core.enums.BookSource
 import com.example.novelfever.core.model.Book
+import com.example.novelfever.core.model.Genre
 
 object MockData {
     val books = listOf(
@@ -68,5 +69,15 @@ object MockData {
             latestChapter = "Chapter 9",
             bookSource = BookSource.NETTRUYEN
         ),
+    )
+    val genres = listOf(
+        Genre("Action", "Action"),
+        Genre("Adventure", "Adventure"),
+        Genre("Comedy", "Comedy"),
+        Genre("Drama", "Drama"),
+        Genre("Fantasy", "Fantasy"),
+        Genre("Historical", "Historical"),
+        Genre("Horror", "Horror"),
+        Genre("Mystery", "Mystery"),
     )
 }

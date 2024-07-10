@@ -43,7 +43,7 @@ class NetTruyenScraper(
             books.add(book)
         }
         emit(books)
-    }.flowOn(Dispatchers.IO) // Apply the flowOn operator here
+    }.flowOn(Dispatchers.IO) 
 
     override suspend fun getGenre(): Flow<List<Genre>> = flow {
         val doc = withContext(Dispatchers.IO) {
@@ -72,9 +72,9 @@ class NetTruyenScraper(
         val chapterElements = doc.select("div.list-chapter ul li")
         val chapters = mutableListOf<Chapter>()
         var chapterDetail: Elements
-        var title = ""
-        var chapterUrl = ""
-        var dateUpdate = ""
+        var title: String
+        var chapterUrl: String
+        var dateUpdate: String
         for (element in chapterElements) {
             chapterDetail = element.select("div")
             title = chapterDetail[0].text()
@@ -96,8 +96,8 @@ class NetTruyenScraper(
             book.url.let { Jsoup.connect(it).userAgent("Mozilla/5.0").get() }
         }
         var altTitle = ""
-        var author = ""
-        var status = ""
+        val author : String
+        val status : String
         val genres = mutableListOf<Genre>()
         val detailInfo = doc.select("div.detail-info div.col-info ul.list-info li")
         if (detailInfo.size == 5) {
