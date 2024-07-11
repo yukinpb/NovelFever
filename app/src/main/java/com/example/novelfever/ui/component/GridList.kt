@@ -1,12 +1,12 @@
-package com.example.novelfever.ui.screen.component
+package com.example.novelfever.ui.component
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.novelfever.core.model.Book
+import com.example.novelfever.ui.screen.component.Item
 
 @Composable
 fun ListItem(books: List<Book>, onClick: (Book) -> Unit, itemPerRow: Int) {

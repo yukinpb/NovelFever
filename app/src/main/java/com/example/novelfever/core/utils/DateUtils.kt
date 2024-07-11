@@ -1,10 +1,10 @@
-package com.example.novelfever.core.util
+package com.example.novelfever.core.utils
 
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object Date{
+object DateUtils{
     fun convertDateStringToLong(dateString: String): Long {
         return try {
             val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
