@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
-    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("androidx.room")
 }
@@ -88,11 +87,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
 
-    // To use Kotlin annotation processing tool (kapt)
-    //noinspection KaptUsageInsteadOfKsp
-    kapt(libs.androidx.room.compiler)
 
-    // To use Kotlin annotation processing tool (kapt)
     implementation(libs.androidx.material.icons.extended)
 
     // Accompanist
