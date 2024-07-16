@@ -9,7 +9,7 @@ import com.example.novelfever.core.model.Book
 import com.example.novelfever.ui.screen.component.Item
 
 @Composable
-fun ListItem(books: List<Book>, onClick: (Book) -> Unit, itemPerRow: Int) {
+fun ListItem(books: List<Book>, onClick: (Book) -> Unit, itemPerRow: Int = 3) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(itemPerRow), modifier = Modifier.fillMaxWidth()
     ) {
