@@ -7,5 +7,5 @@ data class Book(
     val title: String = "",
     val url: String = "",
     val latestChapter: String? = null,
-    val bookSource: BookSource = BookSource.HENTAIVN
+    val bookSource: BookSource
 )

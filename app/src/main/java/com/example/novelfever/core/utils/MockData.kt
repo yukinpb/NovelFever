@@ -79,5 +79,8 @@ object MockData {
         Genre("Historical", "Historical"),
         Genre("Horror", "Horror"),
         Genre("Mystery", "Mystery"),
+        Genre("Romance", "Romance"),
+        Genre("Sci-fi", "Sci-fi"),
+        Genre("Slice of Life", "Slice of Life"),
     )
 }
