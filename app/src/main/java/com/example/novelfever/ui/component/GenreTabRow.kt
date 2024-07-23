@@ -5,6 +5,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -19,31 +20,21 @@ import com.example.novelfever.core.util.MockData
 
 @Composable
 fun GenreTabRow(
-    genres: List<Genre>, selectedGenre: Genre?, onGenreSelected: (Genre) -> Unit
+    genres: List<Genre>, selectedTabIndex: Int, onGenreSelected: (Int) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    TabRow(
+    ScrollableTabRow(
+        selectedTabIndex = selectedTabIndex,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray)
-            .horizontalScroll(scrollState), selectedTabIndex = 0
+            .background(Color.LightGray),
+        edgePadding = 0.dp,
     ) {
-        genres.forEachIndexed { _, genre ->
+        genres.forEachIndexed { index, genre ->
             Tab(
-                selected = selectedGenre == genre,
-                onClick = { onGenreSelected(genre) },
-                modifier = Modifier.background(
-                    color = Color.White
-                )
-            ) {
-                Text(
-                    text = genre.name,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    modifier = Modifier.padding(4.dp),
-                    color = Color.Black
-                )
-            }
+                selected = selectedTabIndex == index,
+                onClick = { onGenreSelected(index) },
+                text = { Text(text = genre.name) }
+            )
         }
     }
 }
@@ -51,8 +42,5 @@ fun GenreTabRow(
 @Composable
 @Preview
 fun PreviewTabRow() {
-    GenreTabRow(
-        genres = MockData.genres,
-        selectedGenre = MockData.genres.first(),
-        onGenreSelected = {})
+
 }
