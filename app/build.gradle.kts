@@ -75,6 +75,7 @@ dependencies {
     //dagger hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //jsoup
     implementation(libs.jsoup)
@@ -97,6 +98,9 @@ dependencies {
 
     //Coil compose
     implementation(libs.coil.compose)
+
+    // Logger
+    implementation(libs.timber)
 }
 // Allow references to generated code
 kapt {

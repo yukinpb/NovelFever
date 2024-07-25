@@ -27,12 +27,14 @@ object JsoupUtils {
     ): Document {
         val requestBuilder = Request.Builder().url(url)
         if (!mapOfHeaders.isNullOrEmpty()) {
-            mapOfHeaders.forEach{
+            mapOfHeaders.forEach {
                 requestBuilder.addHeader(it.key, it.value)
             }
         }
-        return Jsoup.parse(httpClient.newCall(requestBuilder.build())
-            .execute().body!!.string())
+        return Jsoup.parse(
+            httpClient.newCall(requestBuilder.build())
+                .execute().body!!.string()
+        )
     }
 
     fun getJsoupWithCloudflare(
@@ -46,13 +48,13 @@ object JsoupUtils {
 
         val requestBuilder = Request.Builder().url(url)
         if (!mapOfHeaders.isNullOrEmpty()) {
-            mapOfHeaders.forEach{
+            mapOfHeaders.forEach {
                 requestBuilder.addHeader(it.key, it.value)
             }
         }
 
-        return Jsoup.parse(httpClient.newCall(Request.Builder().url(url).build())
-            .execute().body!!.string())
+        val request = requestBuilder.build()
+        return Jsoup.parse(httpClient.newCall(request).execute().body!!.string())
     }
 
     fun getJsoupWithDdosGuard(
@@ -65,12 +67,14 @@ object JsoupUtils {
 
         val requestBuilder = Request.Builder().url(url)
         if (!mapOfHeaders.isNullOrEmpty()) {
-            mapOfHeaders.forEach{
+            mapOfHeaders.forEach {
                 requestBuilder.addHeader(it.key, it.value)
             }
         }
-        return Jsoup.parse(httpClient.newCall(requestBuilder.build())
-            .execute().body!!.string())
+        return Jsoup.parse(
+            httpClient.newCall(requestBuilder.build())
+                .execute().body!!.string()
+        )
     }
 
 }

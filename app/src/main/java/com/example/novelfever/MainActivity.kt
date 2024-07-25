@@ -27,8 +27,10 @@ import com.example.novelfever.ui.screen.SettingScreen
 import com.example.novelfever.ui.screen.UpdateScreen
 import com.example.novelfever.ui.screen.home.HomeScreen
 import com.example.novelfever.ui.theme.NovelFeverTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {

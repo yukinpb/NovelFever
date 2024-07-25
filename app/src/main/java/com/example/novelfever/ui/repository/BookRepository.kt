@@ -3,6 +3,7 @@ package com.example.novelfever.ui.repository
 import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
+import android.util.Log
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.BookDetail
 import com.example.novelfever.core.model.Chapter
@@ -16,8 +17,8 @@ import javax.inject.Inject
 
 interface BookRepository {
     suspend fun getGenre(): List<Genre>
-    suspend fun getBook(url: String, page: Int?): BookResponse
-    suspend fun getBookDetail(book: Book): BookDetail
+    suspend fun getBook(url: String, page: Int?): BookResponse?
+    suspend fun getBookDetail(book: Book): BookDetail?
     suspend fun getChapterList(book: Book): List<Chapter>
     suspend fun getChapterContent(book: Book): List<String>
 }
@@ -39,15 +40,15 @@ class BookRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getBook(url: String, page: Int?): BookResponse = withContext(Dispatchers.IO) {
+    override suspend fun getBook(url: String, page: Int?): BookResponse? = withContext(Dispatchers.IO) {
         try {
             bookSource.getBook(url, page)
         } catch (e: Exception) {
-            BookResponse(emptyList(), "")
+            null
         }
     }
 
-    override suspend fun getBookDetail(book: Book): BookDetail {
+    override suspend fun getBookDetail(book: Book): BookDetail? {
         TODO("Not yet implemented")
     }
 

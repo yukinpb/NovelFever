@@ -9,6 +9,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 
 class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
@@ -76,7 +77,6 @@ class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
                     }
 
                     if (url == origRequestUrl && !challengeFound) {
-                        // The first request didn't return the challenge, abort.
                         latch.countDown()
                     }
                 }
@@ -90,10 +90,8 @@ class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
                 ) {
                     if (isMainFrame) {
                         if (errorCode in ERROR_CODES) {
-                            // Found the Cloudflare challenge page.
                             challengeFound = true
                         } else {
-                            // Unlock thread, the challenge wasn't found.
                             latch.countDown()
                         }
                     }
@@ -103,7 +101,11 @@ class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
             webView?.loadUrl(origRequestUrl, headers)
         }
 
-        latch.awaitFor30Seconds()
+        // Set a timeout for the latch to avoid infinite loops
+        val timeout = 30L // Timeout in seconds
+        if (!latch.await(timeout, TimeUnit.SECONDS)) {
+            throw IOException("Timeout while bypassing Cloudflare")
+        }
 
         // Throw exception if we failed to bypass Cloudflare
         if (!cloudflareBypassed) {

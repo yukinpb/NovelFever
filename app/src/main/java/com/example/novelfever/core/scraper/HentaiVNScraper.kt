@@ -1,12 +1,14 @@
 package com.example.novelfever.core.scraper
 
 import android.content.Context
+import android.util.Log
 import com.example.novelfever.core.enums.BookSource
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.BookDetail
 import com.example.novelfever.core.model.Chapter
 import com.example.novelfever.core.model.Genre
 import com.example.novelfever.core.response.BookResponse
+import com.example.novelfever.core.utils.JsoupUtils.getJsoup
 import com.example.novelfever.core.utils.JsoupUtils.getJsoupWithCloudflare
 
 class HentaiVNScraper(
