@@ -1,5 +1,6 @@
 package com.example.novelfever.ui.screen.home
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.novelfever.ui.component.GenreTabRow
-import com.example.novelfever.ui.component.ListItem
+import com.example.novelfever.ui.component.book.BookList
+import com.example.novelfever.ui.component.custom.CustomLoadMore
+import com.example.novelfever.ui.component.genre.GenreTabRow
 import com.example.novelfever.ui.custom.ErrorIndicator
 import com.example.novelfever.ui.custom.LoadingIndicator
 
@@ -42,7 +44,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
 
     LaunchedEffect(state.genres, state.isLoading) {
         if (!state.isLoading && state.genres.isNotEmpty() && !initialLoadDone) {
-            viewModel.handleEvent(HomeScreenEvent.LoadBook(0))
+            viewModel.handleEvent(HomeScreenEvent.LoadBook(0, 1))
             initialLoadDone = true
         }
     }
@@ -64,7 +66,9 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                     genres = state.genres,
                     selectedTabIndex = selectedTabIndex,
                     onGenreSelected = { index ->
-                        viewModel.handleEvent(HomeScreenEvent.LoadBook(index))
+                        if (state.books.find { it.genre == state.genres[index] } == null) {
+                            viewModel.handleEvent(HomeScreenEvent.LoadBook(index, 1))
+                        }
                         selectedTabIndex = index
                     }
                 )
@@ -78,10 +82,26 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                    ) { page ->
-                        state.genres.getOrNull(page)?.let { genre ->
-                            state.books[genre]?.let { bookResponse ->
-                                ListItem(books = bookResponse.listBook, onClick = {}, itemPerRow = 3)
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            val genre = state.genres.getOrNull(selectedTabIndex)
+                            val bookDisplay = state.books.find { it.genre == genre }
+                            if (genre != null && bookDisplay != null) {
+                                BookList(
+                                    books = bookDisplay.books,
+                                    modifier = Modifier.fillMaxSize(),
+                                    onBookSelected = {
+                                        // Handle book click
+                                    },
+                                    onLoadMore = {
+                                        viewModel.handleEvent(HomeScreenEvent.LoadBook(selectedTabIndex, bookDisplay.currentPage + 1))
+                                    }
+                                )
+                            }
+                            if (state.isLoadMore) {
+                                CustomLoadMore(modifier = Modifier.align(Alignment.BottomCenter))
                             }
                         }
                     }

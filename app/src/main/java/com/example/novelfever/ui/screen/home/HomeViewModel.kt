@@ -1,38 +1,42 @@
 package com.example.novelfever.ui.screen.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.Genre
-import androidx.lifecycle.viewModelScope
-import com.example.novelfever.core.response.BookResponse
 import com.example.novelfever.ui.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 data class HomeScreenState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val isRefreshing: Boolean = false,
+    val isLoadMore: Boolean = false,
     val genres: List<Genre> = emptyList(),
     val genreSelected: Int = 0,
-    val books: Map<Genre, BookResponse> = emptyMap()
+    val books: List<BookDisplay> = listOf()
+)
+
+data class BookDisplay(
+    val genre: Genre,
+    val books: List<Book>,
+    val currentPage: Int
 )
 
 sealed class HomeScreenEvent {
     data object LoadGenre : HomeScreenEvent()
-    data class LoadBook(val index: Int) : HomeScreenEvent()
+    data class LoadBook(val index: Int, val page: Int) : HomeScreenEvent()
     data object RefreshData : HomeScreenEvent()
 }
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: BookRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
     val state: StateFlow<HomeScreenState> = _state
@@ -42,10 +46,10 @@ class HomeViewModel @Inject constructor(
     }
 
     fun handleEvent(event: HomeScreenEvent) {
-            when (event) {
-                is HomeScreenEvent.LoadGenre -> loadGenre()
-                is HomeScreenEvent.LoadBook -> loadBook(event.index)
-                is HomeScreenEvent.RefreshData -> {
+        when (event) {
+            is HomeScreenEvent.LoadGenre -> loadGenre()
+            is HomeScreenEvent.LoadBook -> loadBook(event.index, event.page)
+            is HomeScreenEvent.RefreshData -> {
             }
         }
     }
@@ -57,23 +61,46 @@ class HomeViewModel @Inject constructor(
                 val genres = repository.getGenre()
                 _state.value = _state.value.copy(genres = genres, isLoading = false)
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isError = true)
+                _state.value = _state.value.copy(isError = true, isLoading = false)
             }
         }
     }
 
-    private fun loadBook(index: Int) {
+    private fun loadBook(index: Int, page: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            if (page == 1) {
+                _state.value = _state.value.copy(isLoading = true)
+            } else {
+                _state.value = _state.value.copy(isLoadMore = true)
+            }
+
             try {
-                val bookResponse = repository.getBook(_state.value.genres[index].url, 1)
-                if (bookResponse == null) {
+                val genre = _state.value.genres[index]
+                val bookResponse = repository.getBook(genre.url, page)
+                if (bookResponse.isEmpty()) {
                     _state.value = _state.value.copy(isError = true)
                     return@launch
                 }
-                _state.value = _state.value.copy(books = _state.value.books + (_state.value.genres[index] to bookResponse), isLoading = false)
+                val updatedBooks = _state.value.books.toMutableList()
+                val bookDisplayIndex = updatedBooks.indexOfFirst { it.genre == genre }
+                if (bookDisplayIndex != -1) {
+                    val currentBooks = updatedBooks[bookDisplayIndex].books.toMutableList()
+                    currentBooks.addAll(bookResponse)
+                    updatedBooks[bookDisplayIndex] = updatedBooks[bookDisplayIndex].copy(
+                        books = currentBooks,
+                        currentPage = page
+                    )
+                } else {
+                    updatedBooks.add(BookDisplay(genre, bookResponse, page))
+                }
+                _state.value = _state.value.copy(
+                    books = updatedBooks,
+                    isLoading = false,
+                    isLoadMore = false
+                )
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isError = true)
+                _state.value =
+                    _state.value.copy(isError = true, isLoading = false, isLoadMore = false)
             }
         }
     }

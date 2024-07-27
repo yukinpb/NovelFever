@@ -1,14 +1,12 @@
-package com.example.novelfever.core.scraper
+package com.example.novelfever.core.source.scraper
 
 import android.content.Context
-import android.util.Log
 import com.example.novelfever.core.enums.BookSource
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.BookDetail
 import com.example.novelfever.core.model.Chapter
 import com.example.novelfever.core.model.Genre
-import com.example.novelfever.core.response.BookResponse
-import com.example.novelfever.core.utils.JsoupUtils.getJsoup
+import com.example.novelfever.core.model.Tag
 import com.example.novelfever.core.utils.JsoupUtils.getJsoupWithCloudflare
 
 class HentaiVNScraper(
@@ -16,10 +14,9 @@ class HentaiVNScraper(
     override val source: BookSource = BookSource.HENTAIVN
 ) : BookScraper {
 
-    override suspend fun getBook(url: String, page: Int?): BookResponse {
+    override suspend fun getBook(url: String, page: Int?): List<Book> {
         val doc = getJsoupWithCloudflare("$url?page=$page", context)
         val isMobile = doc.select(".header-logo").size != 0
-        val next = doc.select(".pagination-footer a.current + a").text()
         val el = doc.select(".main .block-item li.item")
         val data = mutableListOf<Book>()
         el.forEach() {
@@ -32,7 +29,11 @@ class HentaiVNScraper(
             )
             data.add(book)
         }
-        return BookResponse(data, next)
+        return data
+    }
+
+    override suspend fun getTag(): List<Tag> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getGenre(): List<Genre> {

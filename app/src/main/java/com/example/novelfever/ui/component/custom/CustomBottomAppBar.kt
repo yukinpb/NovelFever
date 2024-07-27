@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.component
+package com.example.novelfever.ui.component.custom
 
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox

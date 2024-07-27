@@ -18,8 +18,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.novelfever.ui.component.CustomBottomAppBar
-import com.example.novelfever.ui.component.CustomTopAppBar
+import com.example.novelfever.ui.component.custom.CustomBottomAppBar
+import com.example.novelfever.ui.component.custom.CustomTopAppBar
 import com.example.novelfever.ui.navigation.Screen
 import com.example.novelfever.ui.screen.HistoryScreen
 import com.example.novelfever.ui.screen.LibraryScreen
@@ -77,7 +77,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
             }
         }
     }
