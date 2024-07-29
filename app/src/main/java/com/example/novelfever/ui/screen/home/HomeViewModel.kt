@@ -56,12 +56,14 @@ class HomeViewModel @Inject constructor(
 
     private fun loadGenre() {
         viewModelScope.launch {
-            _state.value = HomeScreenState(isLoading = true)
+            _state.value = _state.value.copy(isLoading = true)
             try {
                 val genres = repository.getGenre()
-                _state.value = _state.value.copy(genres = genres, isLoading = false)
+                _state.value = _state.value.copy(genres = genres)
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isError = true, isLoading = false)
+                _state.value = _state.value.copy(isError = true)
+            } finally {
+                _state.value = _state.value.copy(isLoading = false)
             }
         }
     }
@@ -93,14 +95,11 @@ class HomeViewModel @Inject constructor(
                 } else {
                     updatedBooks.add(BookDisplay(genre, bookResponse, page))
                 }
-                _state.value = _state.value.copy(
-                    books = updatedBooks,
-                    isLoading = false,
-                    isLoadMore = false
-                )
+                _state.value = _state.value.copy(books = updatedBooks)
             } catch (e: Exception) {
-                _state.value =
-                    _state.value.copy(isError = true, isLoading = false, isLoadMore = false)
+                _state.value = _state.value.copy(isError = true)
+            } finally {
+                _state.value = _state.value.copy(isLoading = false, isLoadMore = false)
             }
         }
     }

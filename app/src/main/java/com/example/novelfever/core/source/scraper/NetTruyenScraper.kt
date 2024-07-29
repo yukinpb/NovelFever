@@ -31,7 +31,7 @@ class NetTruyenScraper(
         val books = mutableListOf<Book>()
         for (element in elements) {
             val book = Book(
-                title = element.select("div.image a").attr("title"),
+                title = element.select("h3").text(),
                 coverUrl = element.select("div.image a img")
                     .attr("src"),
                 bookSource = source,
@@ -108,7 +108,7 @@ class NetTruyenScraper(
                 genres.add(Genre(name = genre.text(), url = genre.attr("href")))
             }
         }
-        val description = doc.select("div.detail-content p").text()
+        val description = "No description available"
         val chapters = mutableListOf<Chapter>()
         chapters.addAll(getChapterList(book))
         val bookDetail = BookDetail(

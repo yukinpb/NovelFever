@@ -9,18 +9,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.example.novelfever.ui.navigation.Screen
-
+import com.example.novelfever.core.enums.BottomNavItem
 
 @Composable
-fun CustomBottomAppBar(currentPage: Int, onPageSelected: (Int) -> Unit) {
-    val items = listOf(
-        Screen.Home,
-        Screen.Update,
-        Screen.Library,
-        Screen.History,
-        Screen.Setting
-    )
+fun CustomBottomAppBar(items: List<BottomNavItem>, currentPage: Int, onPageSelected: (Int) -> Unit) {
     NavigationBar {
         items.forEachIndexed { index, screen ->
             NavigationBarItem(

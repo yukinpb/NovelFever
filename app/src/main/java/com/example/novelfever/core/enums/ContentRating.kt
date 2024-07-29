@@ -1,6 +1,10 @@
 package com.example.novelfever.core.enums
 
-enum class ContentRating {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class ContentRating : Parcelable {
     SUGGESTIVE,
     ADULT,
     SAFE,

@@ -1,6 +1,5 @@
 package com.example.novelfever.ui.screen.home
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,15 +20,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.novelfever.core.enums.Screen
 import com.example.novelfever.ui.component.book.BookList
 import com.example.novelfever.ui.component.custom.CustomLoadMore
 import com.example.novelfever.ui.component.genre.GenreTabRow
 import com.example.novelfever.ui.custom.ErrorIndicator
 import com.example.novelfever.ui.custom.LoadingIndicator
+import com.example.novelfever.ui.screen.main.SharedViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsState()
 
     val pagerState = rememberPagerState {
@@ -92,8 +97,9 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
                                 BookList(
                                     books = bookDisplay.books,
                                     modifier = Modifier.fillMaxSize(),
-                                    onBookSelected = {
-                                        // Handle book click
+                                    onBookSelected = { book ->
+                                        sharedViewModel.selectBook(book)
+                                        navController.navigate(Screen.Detail.route)
                                     },
                                     onLoadMore = {
                                         viewModel.handleEvent(HomeScreenEvent.LoadBook(selectedTabIndex, bookDisplay.currentPage + 1))

@@ -45,8 +45,12 @@ class BookRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getBookDetail(book: Book): BookDetail? {
-        TODO("Not yet implemented")
+    override suspend fun getBookDetail(book: Book): BookDetail? = withContext(Dispatchers.IO) {
+        try {
+            bookSource.getBookDetail(book)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     override suspend fun getChapterList(book: Book): List<Chapter> {

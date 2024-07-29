@@ -1,6 +1,10 @@
 package com.example.novelfever.core.enums
 
-enum class BookStatus {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class BookStatus : Parcelable {
     COMPLETED,
     ONGOING,
     UPCOMING,

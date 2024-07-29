@@ -1,6 +1,10 @@
 package com.example.novelfever.core.enums
 
-enum class BookType {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class BookType : Parcelable {
     NOVEL,
     MANGA
 }
