@@ -5,10 +5,12 @@ import com.example.novelfever.core.source.scraper.BookScraper
 import com.example.novelfever.core.source.scraper.HentaiVNScraper
 import com.example.novelfever.core.source.scraper.NetTruyenScraper
 
-class SourceSelector(context: Context) {
+class SourceSelector(
+    val context: Context
+) {
     private val sourceMap: Map<String, BookScraper> = mapOf(
-        "hentaivn" to HentaiVNScraper(context),
-        "nettruyen" to NetTruyenScraper(),
+        "hentaivn" to HentaiVNScraper(),
+        "nettruyen" to NetTruyenScraper(context),
     )
 
     fun getSelectedSource(selectedSource: String): BookScraper {

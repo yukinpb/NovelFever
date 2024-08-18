@@ -1,4 +1,4 @@
-package com.example.novelfever.ui.repository
+package com.example.novelfever.core.repository
 
 import android.app.Application
 import android.content.Context
@@ -27,7 +27,7 @@ class BookRepositoryImpl @Inject constructor(
     private val selectedSource = prefs.getString("source", "nettruyen")
 
     private val bookSource: BookScraper =
-        SourceSelector(application as Context).getSelectedSource(selectedSource ?: "hentaivn")
+        SourceSelector(application.baseContext).getSelectedSource(selectedSource ?: "hentaivn")
 
     override suspend fun getGenre(): List<Genre> = withContext(Dispatchers.IO){
         try {

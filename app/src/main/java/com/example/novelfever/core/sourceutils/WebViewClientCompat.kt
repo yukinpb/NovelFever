@@ -24,7 +24,6 @@ abstract class WebViewClientCompat : WebViewClient() {
     ) {
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     final override fun shouldOverrideUrlLoading(
         view: WebView,
         request: WebResourceRequest,
@@ -32,22 +31,11 @@ abstract class WebViewClientCompat : WebViewClient() {
         return shouldOverrideUrlCompat(view, request.url.toString())
     }
 
-    final override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        return shouldOverrideUrlCompat(view, url)
-    }
-
     final override fun shouldInterceptRequest(
         view: WebView,
         request: WebResourceRequest,
     ): WebResourceResponse? {
         return shouldInterceptRequestCompat(view, request.url.toString())
-    }
-
-    final override fun shouldInterceptRequest(
-        view: WebView,
-        url: String,
-    ): WebResourceResponse? {
-        return shouldInterceptRequestCompat(view, url)
     }
 
     final override fun onReceivedError(
@@ -62,15 +50,6 @@ abstract class WebViewClientCompat : WebViewClient() {
             request.url.toString(),
             request.isForMainFrame,
         )
-    }
-
-    final override fun onReceivedError(
-        view: WebView,
-        errorCode: Int,
-        description: String?,
-        failingUrl: String,
-    ) {
-        onReceivedErrorCompat(view, errorCode, description, failingUrl, failingUrl == view.url)
     }
 
     final override fun onReceivedHttpError(

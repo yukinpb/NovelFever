@@ -1,10 +1,11 @@
 package com.example.novelfever.ui.screen.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.Genre
-import com.example.novelfever.ui.repository.BookRepository
+import com.example.novelfever.core.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

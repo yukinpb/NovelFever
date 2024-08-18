@@ -2,8 +2,11 @@ package com.example.novelfever.core.sourceutils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.webkit.*
 import androidx.core.content.ContextCompat
+import com.example.novelfever.ui.component.webview.WebViewActivity
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.IOException
@@ -12,18 +15,23 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 
-class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
+class CloudflareInterceptor(private val context: Context) : Interceptor {
+    private val cookieManager = AndroidCookieJar()
 
-    private val executor = ContextCompat.getMainExecutor(context)
-    val cookieManager = AndroidCookieJar()
-
-    override fun shouldIntercept(response: Response): Boolean {
-        // Check if Cloudflare anti-bot is on
+    private fun shouldIntercept(response: Response): Boolean {
         return response.code in ERROR_CODES && response.header("Server") in SERVER_CHECK
     }
 
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
+        if (!shouldIntercept(response)) {
+            return response
+        }
+        return intercept(chain, request, response)
+    }
 
-    override fun intercept(
+    private fun intercept(
         chain: Interceptor.Chain,
         request: Request,
         response: Response
@@ -31,91 +39,61 @@ class CloudflareInterceptor(context: Context) : WebViewInterceptor(context) {
         try {
             response.close()
             cookieManager.remove(request.url, COOKIE_NAMES, 0)
-            val oldCookie = cookieManager.get(request.url)
-                .firstOrNull { it.name == "cf_clearance" }
-            resolveWithWebView(request, oldCookie)
+            resolveWithWebView(request)
 
             return chain.proceed(request)
         }
-        // Because OkHttp's enqueue only handles IOExceptions, wrap the exception so that
-        // we don't crash the entire app
         catch (e: CloudflareBypassException) {
-            throw IOException("context.getString(R.string.information_cloudflare_bypass_failure)")
+            throw IOException()
         } catch (e: Exception) {
             throw IOException(e)
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun resolveWithWebView(originalRequest: Request, oldCookie: Cookie?) {
-        // We need to lock this thread until the WebView finds the challenge solution url, because
-        // OkHttp doesn't support asynchronous interceptors.
-        val latch = CountDownLatch(1)
-
-        var webView: WebView?
-
-        var challengeFound = false
-        var cloudflareBypassed = false
-
-        val origRequestUrl = originalRequest.url.toString()
+    private fun resolveWithWebView(originalRequest: Request) {
+        val requestUrl = originalRequest.url.toString()
         val headers = parseHeaders(originalRequest.headers)
 
-        executor.execute {
-            webView = createWebView(originalRequest)
+        val intent = Intent(context, WebViewActivity::class.java).apply {
+            putExtra("url", requestUrl)
+            putExtra("headers", headers as HashMap)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
 
-            webView?.webViewClient = object : WebViewClientCompat() {
-                override fun onPageFinished(view: WebView, url: String) {
-                    fun isCloudFlareBypassed(): Boolean {
-                        return cookieManager.get(origRequestUrl.toHttpUrl())
-                            .firstOrNull { it.name == "cf_clearance" }
-                            .let { it != null && it != oldCookie }
-                    }
-
-                    if (isCloudFlareBypassed()) {
-                        cloudflareBypassed = true
-                        latch.countDown()
-                    }
-
-                    if (url == origRequestUrl && !challengeFound) {
-                        latch.countDown()
-                    }
-                }
-
-                override fun onReceivedErrorCompat(
-                    view: WebView,
-                    errorCode: Int,
-                    description: String?,
-                    failingUrl: String,
-                    isMainFrame: Boolean,
-                ) {
-                    if (isMainFrame) {
-                        if (errorCode in ERROR_CODES) {
-                            challengeFound = true
-                        } else {
-                            latch.countDown()
-                        }
-                    }
-                }
+    private fun parseHeaders(headers: Headers): Map<String, String> {
+        return headers
+            .filter { (name, value) ->
+                isRequestHeaderSafe(name, value)
             }
-
-            webView?.loadUrl(origRequestUrl, headers)
-        }
-
-        // Set a timeout for the latch to avoid infinite loops
-        val timeout = 30L // Timeout in seconds
-        if (!latch.await(timeout, TimeUnit.SECONDS)) {
-            throw IOException("Timeout while bypassing Cloudflare")
-        }
-
-        // Throw exception if we failed to bypass Cloudflare
-        if (!cloudflareBypassed) {
-            throw CloudflareBypassException()
-        }
+            .groupBy(keySelector = { (name, _) -> name }) { (_, value) -> value }
+            .mapValues { it.value.getOrNull(0).orEmpty() }
     }
 }
 
 private val ERROR_CODES = listOf(403, 503)
 private val SERVER_CHECK = arrayOf("cloudflare-nginx", "cloudflare")
 private val COOKIE_NAMES = listOf("cf_clearance")
+
+private fun isRequestHeaderSafe(name: String, value: String): Boolean {
+    val nameLower = name.lowercase(Locale.ENGLISH)
+    val valueLower = value.lowercase(Locale.ENGLISH)
+    if (nameLower in unsafeHeaderNames || nameLower.startsWith("proxy-")) return false
+    if (nameLower == "connection" && valueLower == "upgrade") return false
+    return true
+}
+
+private val unsafeHeaderNames = listOf(
+    "content-length",
+    "host",
+    "trailer",
+    "te",
+    "upgrade",
+    "cookie2",
+    "keep-alive",
+    "transfer-encoding",
+    "set-cookie"
+)
 
 private class CloudflareBypassException : Exception()

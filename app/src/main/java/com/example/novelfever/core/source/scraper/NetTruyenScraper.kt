@@ -1,5 +1,6 @@
 package com.example.novelfever.core.source.scraper
 
+import android.content.Context
 import android.util.Log
 import com.example.novelfever.core.enums.BookSource
 import com.example.novelfever.core.enums.BookStatus
@@ -12,6 +13,7 @@ import com.example.novelfever.core.model.Genre
 import com.example.novelfever.core.model.Tag
 import com.example.novelfever.core.utils.DateUtils.convertDateStringToLong
 import com.example.novelfever.core.utils.JsoupUtils.getJsoup
+import com.example.novelfever.core.utils.JsoupUtils.getJsoupWithCloudflare
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,11 +24,12 @@ import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 
 class NetTruyenScraper(
+    val context: Context,
     override val source: BookSource = BookSource.NETTRUYEN
 ) : BookScraper {
 
     override suspend fun getBook(url: String,  page: Int?): List<Book>  {
-        val doc = getJsoup("$url?page=$page")
+        val doc = getJsoupWithCloudflare("$url?page=$page", context)
         val elements = doc.select("div.ModuleContent div.items div.row div.item")
         val books = mutableListOf<Book>()
         for (element in elements) {
@@ -44,7 +47,7 @@ class NetTruyenScraper(
     }
 
     override suspend fun getGenre(): List<Genre>  {
-        val doc = getJsoup(source.url + "/tim-truyen")
+        val doc = getJsoupWithCloudflare(source.url + "/tim-truyen", context)
         val genreElements = doc.select("div.ModuleContent div.dropdown-genres select option")
         val genres = mutableListOf<Genre>()
         for (element in genreElements) {

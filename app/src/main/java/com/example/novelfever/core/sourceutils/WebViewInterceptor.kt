@@ -13,18 +13,10 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 abstract class WebViewInterceptor(private val context: Context) : Interceptor {
-
-
-    /**
-     * When this is called, it initializes the WebView if it wasn't already. We use this to avoid
-     * blocking the main thread too much. If used too often we could consider moving it to the
-     * Application class.
-     */
     private val initWebView by lazy {
         try {
             WebSettings.getDefaultUserAgent(context)
         } catch (_: Exception) {
-            // Avoid some crashes like when Chrome/WebView is being updated.
         }
     }
 
@@ -45,7 +37,6 @@ abstract class WebViewInterceptor(private val context: Context) : Interceptor {
 
     fun parseHeaders(headers: Headers): Map<String, String> {
         return headers
-            // Keeping unsafe header makes web-view throw [net::ERR_INVALID_ARGUMENT]
             .filter { (name, value) ->
                 isRequestHeaderSafe(name, value)
             }
@@ -68,13 +59,11 @@ abstract class WebViewInterceptor(private val context: Context) : Interceptor {
                 loadWithOverviewMode = true
                 cacheMode = WebSettings.LOAD_DEFAULT
             }
-            // Avoid sending empty User-Agent, Chromium WebView will reset to default if empty
             settings.userAgentString = request.header("User-Agent")
         }
     }
 }
 
-// Based on [IsRequestHeaderSafe] in https://source.chromium.org/chromium/chromium/src/+/main:services/network/public/cpp/header_util.cc
 private fun isRequestHeaderSafe(_name: String, _value: String): Boolean {
     val name = _name.lowercase(Locale.ENGLISH)
     val value = _value.lowercase(Locale.ENGLISH)

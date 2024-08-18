@@ -1,21 +1,19 @@
 package com.example.novelfever.core.source.scraper
 
-import android.content.Context
 import com.example.novelfever.core.enums.BookSource
 import com.example.novelfever.core.model.Book
 import com.example.novelfever.core.model.BookDetail
 import com.example.novelfever.core.model.Chapter
 import com.example.novelfever.core.model.Genre
 import com.example.novelfever.core.model.Tag
-import com.example.novelfever.core.utils.JsoupUtils.getJsoupWithCloudflare
+import com.example.novelfever.core.utils.JsoupUtils.getJsoup
 
 class HentaiVNScraper(
-    private val context: Context,
     override val source: BookSource = BookSource.HENTAIVN
 ) : BookScraper {
 
     override suspend fun getBook(url: String, page: Int?): List<Book> {
-        val doc = getJsoupWithCloudflare("$url?page=$page", context)
+        val doc = getJsoup("$url?page=$page")
         val isMobile = doc.select(".header-logo").size != 0
         val el = doc.select(".main .block-item li.item")
         val data = mutableListOf<Book>()

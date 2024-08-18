@@ -1,7 +1,7 @@
 package com.example.novelfever.core.di
 
-import com.example.novelfever.ui.repository.BookRepository
-import com.example.novelfever.ui.repository.BookRepositoryImpl
+import com.example.novelfever.core.repository.BookRepository
+import com.example.novelfever.core.repository.BookRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

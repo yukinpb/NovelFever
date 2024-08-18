@@ -80,7 +80,9 @@ fun HomeScreen(
             }
             when {
                 state.isLoading -> LoadingIndicator()
-                state.isError -> ErrorIndicator()
+                state.isError -> ErrorIndicator(
+                    onRetry = { viewModel.handleEvent(HomeScreenEvent.LoadBook(selectedTabIndex, 0)) }
+                )
                 else -> {
                     HorizontalPager(
                         state = pagerState,
